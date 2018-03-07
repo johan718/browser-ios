@@ -15,6 +15,8 @@ import MobileCoreServices
 
 private let log = Logger.browserLogger
 
+// The list of URI schemes that can be opened in browser
+private let inBrowserURISchemes = ["about", "data", "file", "ftp", "http", "https"]
 
 struct BrowserViewControllerUX {
     static let BackgroundColor = UIConstants.AppBackgroundColor
@@ -768,7 +770,7 @@ class BrowserViewController: UIViewController {
         urlBar.currentURL = url
         urlBar.leaveSearchMode()
 
-        _ = tab.loadRequest(URLRequest(url: url))
+        handleExternalURL(url, tab)
     }
 
     func addBookmark(_ url: URL?, title: String?, parentFolder: Bookmark? = nil) {
@@ -995,6 +997,27 @@ class BrowserViewController: UIViewController {
         self.present(controller, animated: true, completion: nil)
     }
     
+    func isExternalUrl(_ url: URL) -> Bool {
+        return !inBrowserURISchemes.contains(url.scheme!)
+    }
+
+    func handleExternalURL (_ url: URL, _ tab: Browser) {
+        if isExternalUrl(url) {
+            let alertController = UIAlertController(title: "", message: "Allow '" + url.relativeString + "' to open external application?", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                return
+            }
+            let openAction = UIAlertAction(title: "Open", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                _ = tab.loadRequest(URLRequest(url: url))
+            }
+            alertController.addAction(cancelAction)
+            alertController.addAction(openAction)
+            self.present(alertController, animated: true)
+        } else {
+            _ = tab.loadRequest(URLRequest(url: url))
+        }
+    }
+
     func updateFindInPageVisibility(_ visible: Bool) {
         if visible {
             if findInPageBar == nil {
