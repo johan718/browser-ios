@@ -15,6 +15,7 @@ import MobileCoreServices
 
 private let log = Logger.browserLogger
 
+
 struct BrowserViewControllerUX {
     static let BackgroundColor = UIConstants.AppBackgroundColor
     static let ShowHeaderTapAreaHeight: CGFloat = 32
@@ -993,7 +994,7 @@ class BrowserViewController: UIViewController {
         
         self.present(controller, animated: true, completion: nil)
     }
-
+    
     func updateFindInPageVisibility(_ visible: Bool) {
         if visible {
             if findInPageBar == nil {
