@@ -8,6 +8,9 @@ import JavaScriptCore
 let kNotificationPageUnload = "kNotificationPageUnload"
 let kNotificationAllWebViewsDeallocated = "kNotificationAllWebViewsDeallocated"
 
+// The list of URI schemes that can be opened in browser
+private let inBrowserURISchemes = ["about", "data", "file", "ftp", "http", "https"]
+
 func convertNavActionToWKType(_ type:UIWebViewNavigationType) -> WKNavigationType {
     return WKNavigationType(rawValue: type.rawValue)!
 }
@@ -659,10 +662,19 @@ extension BraveWebView: UIWebViewDelegate {
         }
     }
 
+    func isExternalUrl(_ url: URL) -> Bool {
+        return !inBrowserURISchemes.contains(url.scheme!)
+    }
+
     func webView(_ webView: UIWebView,shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType ) -> Bool {
         guard let url = request.url else { return false }
 
         webView.backgroundColor = UIColor.white
+
+        if isExternalUrl(url) {
+            getApp().browserViewController.handleExternalURL(url)
+            return false
+        }
 
         if let contextMenu = window?.rootViewController?.presentedViewController, contextMenu.view.tag == BraveWebViewConstants.kContextMenuBlockNavigation {
             // When showing a context menu, the webview will often still navigate (ex. news.google.com)

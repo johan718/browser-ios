@@ -172,6 +172,18 @@ extension BrowserViewController: WKCompatNavigationDelegate {
         //history.setTopSitesNeedsInvalidation()
     }
 
+    func handleExternalURL (_ url: URL) -> Void {
+        let alertController = UIAlertController(title: "", message: "Allow '" + url.relativeString + "' to open external application?", preferredStyle: UIAlertControllerStyle.alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+            return
+        }
+        let openAction = UIAlertAction(title: "Open", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+            UIApplication.shared.openURL(url)
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(openAction)
+        self.present(alertController, animated: true)
+    }
 
     func webViewDidFailNavigation(_ webView: UIWebView, withError error: NSError) {
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
