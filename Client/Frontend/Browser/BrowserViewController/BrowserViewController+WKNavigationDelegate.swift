@@ -173,7 +173,7 @@ extension BrowserViewController: WKCompatNavigationDelegate {
     }
 
     func handleExternalURL (_ url: URL) -> Void {
-        let alertController = UIAlertController(title: "", message: "Allow '" + url.relativeString + "' to open external application?", preferredStyle: UIAlertControllerStyle.alert)
+        let alertController = UIAlertController(title: "", message: "Allow '" + url.relativeString + "' to be opened in an external application?", preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
             return
         }

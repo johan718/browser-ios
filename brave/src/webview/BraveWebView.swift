@@ -9,7 +9,7 @@ let kNotificationPageUnload = "kNotificationPageUnload"
 let kNotificationAllWebViewsDeallocated = "kNotificationAllWebViewsDeallocated"
 
 // The list of URI schemes that can be opened in browser
-private let inBrowserURISchemes = ["about", "data", "file", "ftp", "http", "https"]
+private let inBrowserURISchemes = ["about", "blob", "data", "file", "ftp", "http", "https", "ws", "wss"]
 
 func convertNavActionToWKType(_ type:UIWebViewNavigationType) -> WKNavigationType {
     return WKNavigationType(rawValue: type.rawValue)!
